@@ -36,12 +36,12 @@ func (world *World) TestCollisions() {
 				leftCollisionable.CanCollideWith(rightCollisionable.GetCollisionMask())
 
 			if mustTestCollision {
-				collision := physics.Collision{
+				tester := physics.CollisionTester{
 					LeftCollisionable:  leftCollisionable,
 					RightCollisionable: rightCollisionable,
 				}
 
-				collision.ReportIfHapenning()
+				tester.ReportIfHapenning()
 			}
 		}
 	}

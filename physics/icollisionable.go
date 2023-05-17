@@ -8,6 +8,6 @@ type ICollisionable interface {
 	GetCollisionMask() string
 	CanCollide() bool
 	CanCollideWith(collisionMask string) bool
-	OnCollision(collisionMask string)
+	OnCollision(collision Collision)
 	IsAlive() bool
 }
