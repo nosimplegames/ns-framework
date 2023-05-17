@@ -2,6 +2,7 @@ package core
 
 import (
 	"github.com/nosimplegames/ns-framework/physics"
+	"github.com/nosimplegames/ns-framework/render"
 	"github.com/nosimplegames/ns-framework/utils"
 )
 
@@ -48,6 +49,16 @@ func (world *World) TestCollisions() {
 
 func (world *World) RemoveDead() {
 	utils.RemoveDead(&world.Collisionables)
+}
+
+func (world World) Draw(target render.RenderTarget) {
+	for _, collisionable := range world.Collisionables {
+		render.Box{
+			Position: collisionable.GetPosition(),
+			Size:     collisionable.GetSize(),
+			Target:   target,
+		}.Render()
+	}
 }
 
 var world *World = nil

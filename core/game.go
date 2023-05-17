@@ -20,6 +20,9 @@ type Game struct {
 	Cameras         []ICamera
 	WindowSize      math.Vector
 	Size            math.Vector
+
+	MustPrintDebug bool
+	MustDrawWorld  bool
 }
 
 func (game *Game) Update(*ebiten.Image) error {
@@ -31,6 +34,14 @@ func (game *Game) Update(*ebiten.Image) error {
 
 	if inpututil.IsKeyJustReleased(ebiten.KeyEscape) {
 		err = errors.New("")
+	}
+
+	if inpututil.IsKeyJustReleased(ebiten.KeyF1) {
+		game.MustPrintDebug = !game.MustPrintDebug
+	}
+
+	if inpututil.IsKeyJustReleased(ebiten.KeyF2) {
+		game.MustDrawWorld = !game.MustDrawWorld
 	}
 
 	return err
@@ -76,7 +87,18 @@ func (game Game) DrawEntities(target render.RenderTarget) {
 			Target:    target,
 		}.Draw()
 	}
-	ebitenutil.DebugPrint(target, strconv.Itoa(len(entities)))
+
+	if game.MustPrintDebug {
+		ebitenutil.DebugPrint(target, strconv.Itoa(len(entities)))
+	}
+
+	if game.MustDrawWorld {
+		isThereWorld := world != nil
+
+		if isThereWorld {
+			world.Draw(target)
+		}
+	}
 }
 
 func (game Game) Layout(_, _ int) (int, int) {
@@ -96,6 +118,24 @@ func (game *Game) SetDefaultBackgroundColor() {
 	if !hasBackgroundColor {
 		game.BackgroundColor = color.Black
 	}
+}
+
+func (game Game) GetDefaultRenderingBox() math.Box {
+	return math.Box{
+		Position: game.Size.By(0.5),
+		Size:     game.Size,
+	}
+}
+
+func (game Game) GetDefaultViewport() math.Box {
+	return math.Box{
+		Position: game.WindowSize.By(0.5),
+		Size:     game.WindowSize,
+	}
+}
+
+func (game *Game) AddCamera(camera ICamera) {
+	game.Cameras = append(game.Cameras, camera)
 }
 
 // func (game *Game) InitDefaultCamera() {
