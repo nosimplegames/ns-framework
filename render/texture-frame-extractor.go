@@ -20,7 +20,7 @@ func (extractor TextureFrameExtractor) Extract() []math.Box {
 
 	for row := 0; row < rows; row++ {
 		for column := 0; column < columns; column++ {
-			mayExtractFrame := framesToExtract == -1 || framesToExtract > 0
+			mayExtractFrame := framesToExtract <= -1 || framesToExtract > 0
 			if !mayExtractFrame {
 				return frames
 			}
