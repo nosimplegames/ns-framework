@@ -41,3 +41,15 @@ func (animator Animator[T, A]) Reverse() animations.IAnimation {
 		AnimateTarget: animator.AnimateTarget,
 	}
 }
+
+func (animator *Animator[T, A]) Pause() {
+	animator.Animation.Pause()
+}
+
+func (animator *Animator[T, A]) Resume() {
+	animator.Animation.Resume()
+}
+
+func (animator *Animator[T, A]) Die() {
+	animator.Animation.Die()
+}

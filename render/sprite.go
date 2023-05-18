@@ -16,6 +16,12 @@ type Sprite struct {
 }
 
 func (sprite Sprite) Render() {
+	canRender := sprite.Texture != nil
+
+	if !canRender {
+		return
+	}
+
 	drawImageOptions := &ebiten.DrawImageOptions{
 		GeoM:   sprite.Transform,
 		ColorM: sprite.ColorM,

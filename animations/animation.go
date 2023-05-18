@@ -11,8 +11,7 @@ const (
 )
 
 type Animation struct {
-	State AnimationState
-	events.EventTarget
+	State  AnimationState
 	OnStop events.Signal
 }
 
@@ -26,8 +25,17 @@ func (animation Animation) IsRunning() bool {
 
 func (animation *Animation) Stop() {
 	animation.State = AnimationStopped
-	animation.DispatchEvent(events.Event{
-		Type: AnimationStoppedEvent,
-	})
 	animation.OnStop.Fire()
+}
+
+func (animation *Animation) Pause() {
+	animation.State = AnimationPaused
+}
+
+func (animation *Animation) Resume() {
+	animation.State = AnimationRunning
+}
+
+func (animation *Animation) Die() {
+	animation.Stop()
 }

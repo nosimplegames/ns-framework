@@ -6,4 +6,7 @@ type IAnimation interface {
 	IsRunning() bool
 	Copy() IAnimation
 	Reverse() IAnimation
+	Pause()
+	Resume()
+	Die()
 }
