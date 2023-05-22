@@ -27,6 +27,7 @@ type Game struct {
 
 func (game *Game) Update(*ebiten.Image) error {
 	GetUpdatables().Update()
+	GetAnimations().Update()
 	game.UpdateEntities()
 	GetWorld().Update()
 

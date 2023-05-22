@@ -1,4 +1,4 @@
-package animators
+package animations
 
 import (
 	"github.com/nosimplegames/ns-framework/math"

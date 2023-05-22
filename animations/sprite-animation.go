@@ -1,6 +1,7 @@
 package animations
 
 import (
+	"github.com/nosimplegames/ns-framework/core"
 	"github.com/nosimplegames/ns-framework/math"
 	"github.com/nosimplegames/ns-framework/render"
 	"github.com/nosimplegames/ns-framework/utils"
@@ -9,11 +10,12 @@ import (
 type SpriteAnimation struct {
 	Animation
 
-	Texture           render.Texture
-	CurrentFrameIndex int
-	Frames            []math.Box
-	FrameDuration     float64
-	CurrentFrameTime  float64
+	texture           render.Texture
+	currentFrameIndex int
+	frames            []math.Box
+	frameDuration     float64
+	currentFrameTime  float64
+	target            ISprite
 }
 
 func (animation *SpriteAnimation) Update() {
@@ -21,63 +23,85 @@ func (animation *SpriteAnimation) Update() {
 		return
 	}
 
-	animation.CurrentFrameTime += utils.FrameTime
-	needToMoveToNextFrame := animation.CurrentFrameTime >= animation.FrameDuration
+	animation.currentFrameTime += utils.FrameTime
+	needToMoveToNextFrame := animation.currentFrameTime >= animation.frameDuration
 
 	if needToMoveToNextFrame {
-		animation.CurrentFrameIndex++
-		animation.CurrentFrameTime = 0
-
-		needToStop := animation.CurrentFrameIndex >= len(animation.Frames)
-
-		if needToStop {
-			animation.Stop()
-		}
+		animation.currentFrameIndex++
+		animation.currentFrameTime = 0
 	}
+}
+
+func (animation SpriteAnimation) HasFinished() bool {
+	hasFinished := animation.currentFrameIndex >= len(animation.frames)
+
+	return hasFinished
+}
+
+func (animation *SpriteAnimation) Restart() {
+	animation.currentFrameTime = 0
+	animation.currentFrameIndex = 0
+
+	animation.Animation.Restart()
+}
+
+func (animation SpriteAnimation) Apply() {
+	animation.target.SetTexture(animation.texture)
+	animation.target.SetRect(animation.GetCurrentRect())
 }
 
 func (animation SpriteAnimation) GetCurrentRect() *math.Box {
 	var rect *math.Box = &math.Box{}
 
 	if animation.IsRunning() {
-		rect = &animation.Frames[animation.CurrentFrameIndex]
+		rect = &animation.frames[animation.currentFrameIndex]
 	}
 
 	return rect
 }
 
-func (animation SpriteAnimation) GetCurrentSprite() render.Sprite {
-	return render.Sprite{
-		Texture: animation.Texture,
-		Rect:    animation.GetCurrentRect(),
-	}
+func (animation *SpriteAnimation) Stop() {
+	animation.target.SetRect(nil)
+	animation.target.SetTexture(nil)
+	animation.Animation.Stop()
 }
 
-func (animation SpriteAnimation) Copy() IAnimation {
-	return &SpriteAnimation{
-		Animation: Animation{
-			State: AnimationRunning,
-		},
-
-		Texture:       animation.Texture,
-		Frames:        animation.Frames,
-		FrameDuration: animation.FrameDuration,
-	}
-}
-
-func (animation SpriteAnimation) Reverse() IAnimation {
+func (animation SpriteAnimation) Copy(target utils.Any) core.IAnimation {
 	copy := &SpriteAnimation{
 		Animation: Animation{
-			State: AnimationRunning,
+			LoopCount: animation.LoopCount,
 		},
-
-		Texture:       animation.Texture,
-		FrameDuration: animation.FrameDuration,
+		texture:       animation.texture,
+		frames:        animation.frames,
+		frameDuration: animation.frameDuration,
+		target:        target.(ISprite),
 	}
 
-	utils.ForEachBackwards(animation.Frames, func(frame math.Box) {
-		copy.Frames = append(copy.Frames, frame)
-	})
-
 	return copy
+}
+
+type SpriteAnimationFactory struct {
+	Texture       render.Texture
+	FrameDuration float64
+	FrameSize     math.Vector
+	FrameCount    int
+	LoopCount     int
+}
+
+func (factory SpriteAnimationFactory) Create(target ISprite) core.IAnimation {
+	animation := &SpriteAnimation{}
+
+	frames := render.TextureFrameExtractor{
+		Texture:    factory.Texture,
+		FrameSize:  factory.FrameSize,
+		FrameCount: factory.FrameCount,
+	}.Extract()
+
+	animation.target = target
+	animation.texture = factory.Texture
+	animation.frameDuration = factory.FrameDuration
+	animation.frames = frames
+	animation.LoopCount = factory.LoopCount
+
+	return animation
 }
