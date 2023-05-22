@@ -8,7 +8,9 @@ type LinearPenetrationCalculator struct {
 }
 
 func (calculator LinearPenetrationCalculator) Calculate() float64 {
-	penetration := math.Abs(calculator.LineA.End() - calculator.LineB.Start)
+	penetrationA := math.Abs(calculator.LineA.End() - calculator.LineB.Start)
+	penetrationB := math.Abs(calculator.LineB.End() - calculator.LineA.Start)
+	minPenetration := math.Min(penetrationA, penetrationB)
 
-	return penetration
+	return minPenetration
 }
