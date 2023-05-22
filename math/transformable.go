@@ -75,10 +75,7 @@ func (transformable *Transformable) GetTransform() Transform {
 func (transformable *Transformable) calculateTransform() {
 	transform := Transform{}
 
-	if transformable.wasScaleSet {
-		transform.Scale(transformable.scale.X, transformable.scale.Y)
-	}
-
+	transformable.applyScaleToTransform(&transform)
 	transform.Translate(
 		-transformable.origin.X,
 		-transformable.origin.Y,
@@ -91,4 +88,24 @@ func (transformable *Transformable) calculateTransform() {
 
 	transformable.transform = transform
 	transformable.wasTransformCalculated = true
+}
+
+func (transformable Transformable) applyScaleToTransform(transform *Transform) {
+	if transformable.wasScaleSet {
+		transform.Scale(transformable.scale.X, transformable.scale.Y)
+
+		positionCorrection := Vector{}
+		isXScaleNegative := transformable.scale.X < 0
+		isYScaleNegative := transformable.scale.Y < 0
+
+		if isXScaleNegative {
+			positionCorrection.X = transformable.origin.X * 2.0
+		}
+
+		if isYScaleNegative {
+			positionCorrection.Y = -transformable.origin.Y * 2.0
+		}
+
+		transform.Translate(positionCorrection.X, positionCorrection.Y)
+	}
 }
