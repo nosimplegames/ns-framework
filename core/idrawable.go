@@ -7,5 +7,7 @@ import (
 
 type IDrawable interface {
 	IsVisible() bool
+	Hide()
+	Show()
 	Draw(target render.RenderTarget, combinedTransform math.Transform)
 }
