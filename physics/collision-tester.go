@@ -26,14 +26,16 @@ func (tester CollisionTester) Report() {
 			LeftAABB:  leftAABB,
 			RightAABB: rightAABB,
 		},
+		Another: tester.RightCollisionable,
 	}
 
 	rightCollision := Collision{
-		AnotherCollisionMask: tester.RightCollisionable.GetCollisionMask(),
+		AnotherCollisionMask: tester.LeftCollisionable.GetCollisionMask(),
 		CollisionResolverCalculator: CollisionResolverCalculator{
 			LeftAABB:  rightAABB,
 			RightAABB: leftAABB,
 		},
+		Another: tester.LeftCollisionable,
 	}
 
 	tester.LeftCollisionable.OnCollision(leftCollision)

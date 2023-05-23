@@ -1,16 +1,15 @@
-package core
+package physics
 
 import (
-	"github.com/nosimplegames/ns-framework/physics"
 	"github.com/nosimplegames/ns-framework/render"
 	"github.com/nosimplegames/ns-framework/utils"
 )
 
 type World struct {
-	Collisionables []physics.ICollisionable
+	Collisionables []ICollisionable
 }
 
-func (world *World) AddCollisinable(collisionable physics.ICollisionable) {
+func (world *World) AddCollisinable(collisionable ICollisionable) {
 	world.Collisionables = append(world.Collisionables, collisionable)
 }
 
@@ -36,7 +35,7 @@ func (world *World) TestCollisions() {
 				leftCollisionable.CanCollideWith(rightCollisionable.GetCollisionMask())
 
 			if mustTestCollision {
-				tester := physics.CollisionTester{
+				tester := CollisionTester{
 					LeftCollisionable:  leftCollisionable,
 					RightCollisionable: rightCollisionable,
 				}

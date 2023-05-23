@@ -10,6 +10,7 @@ import (
 	"github.com/hajimehoshi/ebiten/inpututil"
 	"github.com/nosimplegames/ns-framework/math"
 	"github.com/nosimplegames/ns-framework/nodes"
+	"github.com/nosimplegames/ns-framework/physics"
 	"github.com/nosimplegames/ns-framework/render"
 )
 
@@ -29,7 +30,7 @@ func (game *Game) Update(*ebiten.Image) error {
 	GetUpdatables().Update()
 	GetAnimations().Update()
 	game.UpdateEntities()
-	GetWorld().Update()
+	physics.GetWorld().Update()
 
 	var err error = nil
 
@@ -94,11 +95,8 @@ func (game Game) DrawEntities(target render.RenderTarget) {
 	}
 
 	if game.MustDrawWorld {
-		isThereWorld := world != nil
-
-		if isThereWorld {
-			world.Draw(target)
-		}
+		world := physics.GetWorld()
+		world.Draw(target)
 	}
 }
 
