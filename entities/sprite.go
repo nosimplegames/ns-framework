@@ -27,6 +27,11 @@ func (sprite *Sprite) SetOriginCenter() {
 	sprite.SetOrigin(size.By(0.5))
 }
 
+func (sprite *Sprite) UseTextureSizeAsSize() {
+	size := render.GetTextureSize(sprite.Texture)
+	sprite.Size = size
+}
+
 func (sprite Sprite) Draw(target render.RenderTarget, transform math.Transform) {
 	render.Sprite{
 		Texture:   sprite.Texture,
@@ -35,4 +40,18 @@ func (sprite Sprite) Draw(target render.RenderTarget, transform math.Transform) 
 		Rect:      sprite.Rect,
 		ColorM:    sprite.ColorM,
 	}.Render()
+}
+
+type SpriteFactory struct {
+	Texture render.Texture
+}
+
+func (factory SpriteFactory) Create() *Sprite {
+	sprite := &Sprite{}
+
+	sprite.Size = render.GetTextureSize(factory.Texture)
+	sprite.Texture = factory.Texture
+	sprite.SetOriginCenter()
+
+	return sprite
 }
