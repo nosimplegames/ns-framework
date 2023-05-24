@@ -49,9 +49,13 @@ type SpriteFactory struct {
 func (factory SpriteFactory) Create() *Sprite {
 	sprite := &Sprite{}
 
-	sprite.Size = render.GetTextureSize(factory.Texture)
-	sprite.Texture = factory.Texture
-	sprite.SetOriginCenter()
+	factory.Init(sprite)
 
 	return sprite
+}
+
+func (factory SpriteFactory) Init(sprite *Sprite) {
+	sprite.Size = render.GetTextureSize(factory.Texture)
+	sprite.Texture = factory.Texture
+	sprite.SetOrigin(sprite.Size.By(0.5))
 }
