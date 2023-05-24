@@ -10,5 +10,6 @@ type INode[T any] interface {
 
 	GetChildren() []T
 	RemoveDeadChildren()
+	RemoveChildren()
 	SetParent(T)
 }

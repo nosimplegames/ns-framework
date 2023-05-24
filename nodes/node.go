@@ -37,6 +37,15 @@ func (node *Node[T]) RemoveDeadChildren() {
 	utils.RemoveDead(&node.children)
 }
 
+func (node *Node[T]) RemoveChildren() {
+	for _, child := range node.children {
+		child.RemoveChildren()
+		child.Die()
+	}
+
+	node.children = []T{}
+}
+
 func (node Node[T]) SetId(id string) {
 	node.id = id
 }
