@@ -55,6 +55,12 @@ func (factory SpriteFactory) Create() *Sprite {
 }
 
 func (factory SpriteFactory) Init(sprite *Sprite) {
+	hasTexture := factory.Texture != nil
+
+	if !hasTexture {
+		return
+	}
+
 	sprite.Size = render.GetTextureSize(factory.Texture)
 	sprite.Texture = factory.Texture
 	sprite.SetOrigin(sprite.Size.By(0.5))
