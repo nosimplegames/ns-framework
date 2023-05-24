@@ -20,7 +20,11 @@ func (drawer EntityDrawer) Draw() {
 	transform := drawer.Entity.GetTransform()
 	transform.Concat(drawer.Transform)
 
-	drawer.Entity.Draw(drawer.Target, transform)
+	mustDrawEntityBeforeChildren := drawer.Entity.GetDrawPolicy() == DrawBeforeChildren
+
+	if mustDrawEntityBeforeChildren {
+		drawer.Entity.Draw(drawer.Target, transform)
+	}
 
 	for _, child := range drawer.Entity.GetChildren() {
 		EntityDrawer{
@@ -28,5 +32,9 @@ func (drawer EntityDrawer) Draw() {
 			Transform: transform,
 			Target:    drawer.Target,
 		}.Draw()
+	}
+
+	if !mustDrawEntityBeforeChildren {
+		drawer.Entity.Draw(drawer.Target, transform)
 	}
 }

@@ -11,7 +11,8 @@ type Entity struct {
 	nodes.Living
 	Drawable
 
-	Size math.Vector
+	Size       math.Vector
+	drawPolicy DrawPolicy
 }
 
 func (entity *Entity) HandleInput() {
@@ -48,4 +49,12 @@ func (entity Entity) GetAncestorsTransform() math.Transform {
 
 func (entity Entity) GetSize() math.Vector {
 	return entity.Size
+}
+
+func (entity *Entity) SetDrawPolicy(drawPolicy DrawPolicy) {
+	entity.drawPolicy = drawPolicy
+}
+
+func (entity Entity) GetDrawPolicy() DrawPolicy {
+	return entity.drawPolicy
 }

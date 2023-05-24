@@ -5,6 +5,13 @@ import (
 	"github.com/nosimplegames/ns-framework/nodes"
 )
 
+type DrawPolicy int
+
+const (
+	DrawBeforeChildren DrawPolicy = iota
+	DrawAfterChildren
+)
+
 type IEntity interface {
 	nodes.ILiving
 	IDrawable
@@ -16,4 +23,6 @@ type IEntity interface {
 
 	GetAncestorsTransform() math.Transform
 	GetSize() math.Vector
+
+	GetDrawPolicy() DrawPolicy
 }
