@@ -14,7 +14,7 @@ func (updater EntityUpdater) handleInput() {
 
 	for _, child := range updater.Entity.GetChildren() {
 		EntityUpdater{
-			Entity: child,
+			Entity: child.(IEntity),
 		}.handleInput()
 	}
 }
@@ -24,7 +24,7 @@ func (updater EntityUpdater) updateEntity() {
 
 	for _, child := range updater.Entity.GetChildren() {
 		EntityUpdater{
-			Entity: child,
+			Entity: child.(IEntity),
 		}.updateEntity()
 	}
 

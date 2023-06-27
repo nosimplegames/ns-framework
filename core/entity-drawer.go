@@ -28,7 +28,7 @@ func (drawer EntityDrawer) Draw() {
 
 	for _, child := range drawer.Entity.GetChildren() {
 		EntityDrawer{
-			Entity:    child,
+			Entity:    child.(IEntity),
 			Transform: transform,
 			Target:    drawer.Target,
 		}.Draw()

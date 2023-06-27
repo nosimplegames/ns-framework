@@ -39,3 +39,8 @@ func (vector Vector) Add(another Vector) Vector {
 		Y: vector.Y + another.Y,
 	}
 }
+
+func (vector Vector) Equals(another Vector) bool {
+	return vector.X == another.X &&
+		vector.Y == another.Y
+}

@@ -9,13 +9,12 @@ import (
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/hajimehoshi/ebiten/inpututil"
 	"github.com/nosimplegames/ns-framework/math"
-	"github.com/nosimplegames/ns-framework/nodes"
 	"github.com/nosimplegames/ns-framework/physics"
 	"github.com/nosimplegames/ns-framework/render"
 )
 
 type Game struct {
-	nodes.Node[IEntity]
+	ScenesManager
 
 	BackgroundColor color.Color
 	Cameras         []ICamera
@@ -50,13 +49,15 @@ func (game *Game) Update(*ebiten.Image) error {
 }
 
 func (game *Game) UpdateEntities() {
-	for _, entity := range game.GetChildren() {
-		EntityUpdater{
-			Entity: entity,
-		}.Update()
+	scene, hasScene := game.GetScene()
+
+	if !hasScene {
+		return
 	}
 
-	game.RemoveDeadChildren()
+	EntityUpdater{
+		Entity: scene,
+	}.Update()
 }
 
 func (game Game) Draw(screen render.RenderTarget) {
@@ -81,23 +82,39 @@ func (game Game) DrawCameras(screen render.RenderTarget) {
 }
 
 func (game Game) DrawEntities(target render.RenderTarget) {
-	entities := game.GetChildren()
-	for _, entity := range entities {
-		EntityDrawer{
-			Entity:    entity,
-			Transform: math.Transform{},
-			Target:    target,
-		}.Draw()
+	scene, hasScene := game.GetScene()
+
+	if !hasScene {
+		return
 	}
 
+	EntityDrawer{
+		Entity:    scene,
+		Transform: math.Transform{},
+		Target:    target,
+	}.Draw()
+
 	if game.MustPrintDebug {
-		ebitenutil.DebugPrint(target, strconv.Itoa(len(entities)))
+		totalEntities := len(scene.GetChildren())
+		ebitenutil.DebugPrint(target, strconv.Itoa(totalEntities))
 	}
 
 	if game.MustDrawWorld {
 		world := physics.GetWorld()
 		world.Draw(target)
 	}
+}
+
+func (game *Game) PushScene(scene IScene) {
+	game.ScenesManager.PushScene(scene)
+
+	currentScene, hasScene := game.GetScene()
+
+	if !hasScene {
+		return
+	}
+
+	root = currentScene
 }
 
 func (game Game) Layout(_, _ int) (int, int) {
@@ -107,7 +124,6 @@ func (game Game) Layout(_, _ int) (int, int) {
 func (game *Game) Run() {
 	ebiten.SetWindowSize(int(game.WindowSize.X), int(game.WindowSize.Y))
 	game.SetDefaultBackgroundColor()
-	// game.InitDefaultCamera()
 	ebiten.RunGame(game)
 }
 
@@ -137,27 +153,15 @@ func (game *Game) AddCamera(camera ICamera) {
 	game.Cameras = append(game.Cameras, camera)
 }
 
-// func (game *Game) InitDefaultCamera() {
-// 	hasCameras := len(game.Cameras) > 0
+var root IEntity
 
-// 	if hasCameras {
-// 		return
-// 	}
+func GetRoot() IEntity {
+	return root
+}
 
-// 	defaultCamera := &Camera{}
-// 	defaultCamera.RenderingBox = math.Box{
-// 		Position: game.Size.By(0.5),
-// 		Size:     game.Size,
-// 	}
-// 	defaultCamera.SetViewport(math.Box{
-// 		Position: game.WindowSize.By(0.5),
-// 		Size:     game.WindowSize,
-// 	})
-// 	game.Cameras = append(game.Cameras, defaultCamera)
-// }
-
-// func (game *Game) GetDefaultCamera() *Camera {
-// 	game.InitDefaultCamera()
-
-// 	return game.Cameras[0]
-// }
+func AddChildToRoot(child IEntity) {
+	EntityAdder{
+		Parent: root,
+		Child:  child,
+	}.Add()
+}

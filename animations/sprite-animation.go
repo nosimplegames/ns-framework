@@ -66,7 +66,7 @@ func (animation *SpriteAnimation) Stop() {
 	animation.Animation.Stop()
 }
 
-func (animation SpriteAnimation) Copy(target utils.Any) core.IAnimation {
+func (animation SpriteAnimation) Copy(target core.IAnimationTarget) core.IAnimation {
 	copy := &SpriteAnimation{
 		Animation: Animation{
 			LoopCount: animation.LoopCount,

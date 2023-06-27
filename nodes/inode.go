@@ -8,8 +8,10 @@ type INode[T any] interface {
 	GetType() string
 	SetType(string)
 
-	GetChildren() []T
+	addChild(INode[T])
+	GetChildren() []INode[T]
 	RemoveDeadChildren()
 	RemoveChildren()
-	SetParent(T)
+	setParent(INode[T])
+	GetParent() (INode[T], bool)
 }

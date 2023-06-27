@@ -3,34 +3,29 @@ package nodes
 import "github.com/nosimplegames/ns-framework/utils"
 
 type Node[T INode[T]] struct {
+	Living
+
 	id    string
 	type_ string
 
-	children []T
-	parent   T
+	children []INode[T]
+	parent   INode[T]
 }
 
-func (node *Node[T]) AddChild(child T) {
+func (node *Node[T]) addChild(child INode[T]) {
 	node.children = append(node.children, child)
-	child.SetParent(child)
 }
 
-func (node *Node[T]) AddChildren(children []T) {
-	for _, child := range children {
-		node.AddChild(child)
-	}
-}
-
-func (node Node[T]) GetChildren() []T {
+func (node Node[T]) GetChildren() []INode[T] {
 	return node.children
 }
 
-func (node Node[T]) SetParent(parent T) {
+func (node *Node[T]) setParent(parent INode[T]) {
 	node.parent = parent
 }
 
-func (node Node[T]) GetParent() T {
-	return node.parent
+func (node Node[T]) GetParent() (INode[T], bool) {
+	return node.parent, node.parent != nil
 }
 
 func (node *Node[T]) RemoveDeadChildren() {
@@ -43,7 +38,7 @@ func (node *Node[T]) RemoveChildren() {
 		child.Die()
 	}
 
-	node.children = []T{}
+	node.children = []INode[T]{}
 }
 
 func (node Node[T]) SetId(id string) {

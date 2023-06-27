@@ -1,6 +1,15 @@
 package core
 
+import (
+	"github.com/nosimplegames/ns-framework/events"
+	"github.com/nosimplegames/ns-framework/utils"
+)
+
+type IAnimationTarget utils.Any
+
 type IAnimation interface {
+	events.IEventTarget
+
 	Update()
 	Apply()
 
@@ -14,5 +23,5 @@ type IAnimation interface {
 	Resume()
 	Stop()
 
-	Copy(interface{}) IAnimation
+	Copy(IAnimationTarget) IAnimation
 }

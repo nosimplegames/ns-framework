@@ -1,12 +1,8 @@
-package animations
+package oldanimations
 
 import "github.com/nosimplegames/ns-framework/events"
 
 type AnimationState int
-
-const (
-	AnimationInfiniteLoop = -1
-)
 
 const (
 	AnimationRunning AnimationState = iota
@@ -15,11 +11,8 @@ const (
 )
 
 type Animation struct {
-	events.EventTarget
-
-	State       AnimationState
-	LoopCount   int
-	CurrentLoop int
+	State  AnimationState
+	OnStop events.Signal
 }
 
 func (animation Animation) IsAlive() bool {
@@ -32,9 +25,7 @@ func (animation Animation) IsRunning() bool {
 
 func (animation *Animation) Stop() {
 	animation.State = AnimationStopped
-	animation.DispatchEvent(events.Event{
-		Type: "stopped",
-	})
+	animation.OnStop.Fire()
 }
 
 func (animation *Animation) Pause() {
@@ -45,11 +36,6 @@ func (animation *Animation) Resume() {
 	animation.State = AnimationRunning
 }
 
-func (animation Animation) WillReplay() bool {
-	willReplay := animation.LoopCount == AnimationInfiniteLoop || animation.LoopCount-animation.CurrentLoop > 0
-	return willReplay
-}
-
-func (animation *Animation) Restart() {
-	animation.CurrentLoop++
+func (animation *Animation) Die() {
+	animation.Stop()
 }

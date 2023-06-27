@@ -13,7 +13,6 @@ const (
 )
 
 type IEntity interface {
-	nodes.ILiving
 	IDrawable
 	math.ITransformable
 	nodes.INode[IEntity]
@@ -23,6 +22,7 @@ type IEntity interface {
 
 	GetAncestorsTransform() math.Transform
 	GetSize() math.Vector
+	SetSize(math.Vector)
 
 	GetDrawPolicy() DrawPolicy
 }

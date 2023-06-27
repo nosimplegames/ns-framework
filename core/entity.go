@@ -8,10 +8,9 @@ import (
 type Entity struct {
 	math.Transformable
 	nodes.Node[IEntity]
-	nodes.Living
 	Drawable
 
-	Size       math.Vector
+	size       math.Vector
 	drawPolicy DrawPolicy
 }
 
@@ -35,20 +34,24 @@ func (entity Entity) GetPosition() math.Vector {
 func (entity Entity) GetAncestorsTransform() math.Transform {
 	transform := math.Transform{}
 
-	parent := entity.GetParent()
-	hasParent := parent != nil
+	parent, hasParent := entity.GetParent()
 
 	if hasParent {
-		parentTransform := parent.GetAncestorsTransform()
+		entityParent := parent.(IEntity)
+		parentTransform := entityParent.GetAncestorsTransform()
 		transform.Concat(parentTransform)
-		transform.Concat(parent.GetTransform())
+		transform.Concat(entityParent.GetTransform())
 	}
 
 	return transform
 }
 
+func (entity *Entity) SetSize(size math.Vector) {
+	entity.size = size
+}
+
 func (entity Entity) GetSize() math.Vector {
-	return entity.Size
+	return entity.size
 }
 
 func (entity *Entity) SetDrawPolicy(drawPolicy DrawPolicy) {

@@ -50,3 +50,8 @@ func GetTimer() *Timer {
 
 	return timer
 }
+
+func AddTimeout(timeout ITimeout) {
+	timer := GetTimer()
+	timer.Timeouts = append(timer.Timeouts, timeout)
+}

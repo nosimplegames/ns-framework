@@ -20,6 +20,6 @@ func (camera *Camera) SetTexture(texture render.Texture) {
 
 func (camera *Camera) SetViewport(viewport math.Box) {
 	camera.SetPosition(viewport.Position)
-	camera.Size = viewport.Size
-	camera.SetOrigin(camera.Size.By(0.5))
+	camera.SetSize(viewport.Size)
+	camera.SetOrigin(viewport.Size.By(0.5))
 }

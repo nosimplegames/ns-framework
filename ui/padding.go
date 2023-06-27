@@ -15,3 +15,12 @@ func SamePadding(padding float64) Padding {
 		Left:   padding,
 	}
 }
+
+func HorizontalVerticalPadding(horizontal float64, vertical float64) Padding {
+	return Padding{
+		Top:    vertical,
+		Right:  horizontal,
+		Bottom: vertical,
+		Left:   horizontal,
+	}
+}

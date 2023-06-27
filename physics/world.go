@@ -30,9 +30,11 @@ func (world *World) TestCollisions() {
 
 		for j := i + 1; j < len(world.Collisionables); j++ {
 			rightCollisionable := world.Collisionables[j]
-			mustTestCollision := rightCollisionable.IsAlive() &&
-				rightCollisionable.CanCollide() &&
-				leftCollisionable.CanCollideWith(rightCollisionable.GetCollisionMask())
+			canCollisionablesCollide := leftCollisionable.CanCollideWith(rightCollisionable.GetCollisionMask()) ||
+				rightCollisionable.CanCollideWith(leftCollisionable.GetCollisionMask())
+			canRightCollide := rightCollisionable.IsAlive() &&
+				rightCollisionable.CanCollide()
+			mustTestCollision := canRightCollide && canCollisionablesCollide
 
 			if mustTestCollision {
 				tester := CollisionTester{
@@ -70,4 +72,9 @@ func GetWorld() *World {
 	}
 
 	return world
+}
+
+func AddCollisionable(collisionable ICollisionable) {
+	world := GetWorld()
+	world.AddCollisinable(collisionable)
 }

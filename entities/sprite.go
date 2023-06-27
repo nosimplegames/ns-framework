@@ -29,7 +29,7 @@ func (sprite *Sprite) SetOriginCenter() {
 
 func (sprite *Sprite) UseTextureSizeAsSize() {
 	size := render.GetTextureSize(sprite.Texture)
-	sprite.Size = size
+	sprite.SetSize(size)
 }
 
 func (sprite Sprite) Draw(target render.RenderTarget, transform math.Transform) {
@@ -61,7 +61,8 @@ func (factory SpriteFactory) Init(sprite *Sprite) {
 		return
 	}
 
-	sprite.Size = render.GetTextureSize(factory.Texture)
+	textureSize := render.GetTextureSize(factory.Texture)
+	sprite.SetSize(textureSize)
 	sprite.Texture = factory.Texture
-	sprite.SetOrigin(sprite.Size.By(0.5))
+	sprite.SetOrigin(textureSize.By(0.5))
 }
