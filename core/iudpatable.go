@@ -6,5 +6,5 @@ type IUpdatable interface {
 	nodes.ILiving
 
 	IsRunning() bool
-	Update()
+	UpdateFrame()
 }

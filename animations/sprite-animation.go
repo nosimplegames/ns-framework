@@ -18,7 +18,7 @@ type SpriteAnimation struct {
 	target            ISprite
 }
 
-func (animation *SpriteAnimation) Update() {
+func (animation *SpriteAnimation) UpdateFrame() {
 	if !animation.IsRunning() {
 		return
 	}

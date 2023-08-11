@@ -10,14 +10,14 @@ func (animations *Animations) AddAnimation(animation IAnimation) {
 	animations.animations = append(animations.animations, animation)
 }
 
-func (animations *Animations) Update() {
+func (animations *Animations) UpdateFrame() {
 	for _, animation := range animations.animations {
 		if !animation.IsAlive() {
 			continue
 		}
 
 		animation.Apply()
-		animation.Update()
+		animation.UpdateFrame()
 
 		if animation.HasFinished() {
 			if animation.WillReplay() {

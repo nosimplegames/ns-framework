@@ -18,7 +18,7 @@ type Timeout struct {
 	ForcedDeath bool
 }
 
-func (timeout *Timeout) Update() {
+func (timeout *Timeout) UpdateFrame() {
 	timeout.CurrentTime += utils.FrameTime
 }
 

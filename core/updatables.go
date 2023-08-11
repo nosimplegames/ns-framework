@@ -10,9 +10,9 @@ func (updatables *Updatables) AddUpdatable(updatable IUpdatable) {
 	updatables.Updatables = append(updatables.Updatables, updatable)
 }
 
-func (updatables *Updatables) Update() {
+func (updatables *Updatables) UpdateFrame() {
 	for _, updatable := range updatables.Updatables {
-		updatable.Update()
+		updatable.UpdateFrame()
 	}
 
 	utils.RemoveDead(&updatables.Updatables)

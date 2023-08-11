@@ -17,7 +17,7 @@ type Entity struct {
 func (entity *Entity) HandleInput() {
 }
 
-func (entity *Entity) Update() {
+func (entity *Entity) UpdateFrame() {
 }
 
 func (entity Entity) GetPosition() math.Vector {

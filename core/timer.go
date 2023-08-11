@@ -11,9 +11,9 @@ type Timer struct {
 	Timeouts []ITimeout
 }
 
-func (timer *Timer) Update() {
+func (timer *Timer) UpdateFrame() {
 	for _, timeout := range timer.Timeouts {
-		timeout.Update()
+		timeout.UpdateFrame()
 	}
 
 	for _, timeout := range timer.Timeouts {

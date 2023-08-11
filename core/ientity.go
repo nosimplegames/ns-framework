@@ -18,7 +18,7 @@ type IEntity interface {
 	nodes.INode[IEntity]
 
 	HandleInput()
-	Update()
+	UpdateFrame()
 
 	GetAncestorsTransform() math.Transform
 	GetSize() math.Vector

@@ -10,7 +10,7 @@ type IAnimationTarget utils.Any
 type IAnimation interface {
 	events.IEventTarget
 
-	Update()
+	UpdateFrame()
 	Apply()
 
 	WillReplay() bool

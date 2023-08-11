@@ -17,7 +17,7 @@ package ui
 // 	needToCalculateSize    bool
 // }
 
-// func (container *Container) Update() {
+// func (container *Container) UpdateFrame() {
 // 	hasLayout := container.Layout != nil
 
 // 	if !hasLayout {

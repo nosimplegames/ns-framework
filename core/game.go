@@ -25,11 +25,11 @@ type Game struct {
 	MustDrawWorld  bool
 }
 
-func (game *Game) Update(*ebiten.Image) error {
-	GetUpdatables().Update()
-	GetAnimations().Update()
+func (game *Game) UpdateFrame(*ebiten.Image) error {
+	GetUpdatables().UpdateFrame()
+	GetAnimations().UpdateFrame()
 	game.UpdateEntities()
-	physics.GetWorld().Update()
+	physics.GetWorld().UpdateFrame()
 
 	var err error = nil
 
@@ -57,7 +57,7 @@ func (game *Game) UpdateEntities() {
 
 	EntityUpdater{
 		Entity: scene,
-	}.Update()
+	}.UpdateFrame()
 }
 
 func (game Game) Draw(screen render.RenderTarget) {

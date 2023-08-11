@@ -13,7 +13,7 @@ func (world *World) AddCollisinable(collisionable ICollisionable) {
 	world.Collisionables = append(world.Collisionables, collisionable)
 }
 
-func (world *World) Update() {
+func (world *World) UpdateFrame() {
 	world.TestCollisions()
 	world.RemoveDead()
 }
@@ -77,4 +77,12 @@ func GetWorld() *World {
 func AddCollisionable(collisionable ICollisionable) {
 	world := GetWorld()
 	world.AddCollisinable(collisionable)
+}
+
+func AddCollisionables(collisionables []ICollisionable) {
+	world := GetWorld()
+
+	for _, collisionable := range collisionables {
+		world.AddCollisinable(collisionable)
+	}
 }

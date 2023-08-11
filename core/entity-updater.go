@@ -4,7 +4,7 @@ type EntityUpdater struct {
 	Entity IEntity
 }
 
-func (updater EntityUpdater) Update() {
+func (updater EntityUpdater) UpdateFrame() {
 	updater.handleInput()
 	updater.updateEntity()
 }
@@ -20,7 +20,7 @@ func (updater EntityUpdater) handleInput() {
 }
 
 func (updater EntityUpdater) updateEntity() {
-	updater.Entity.Update()
+	updater.Entity.UpdateFrame()
 
 	for _, child := range updater.Entity.GetChildren() {
 		EntityUpdater{

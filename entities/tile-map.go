@@ -5,6 +5,10 @@ import (
 	"github.com/nosimplegames/ns-framework/render"
 )
 
+type TileMap struct {
+	Sprite
+}
+
 type TileMapFactory struct {
 	TileSet   render.Texture
 	TileSize  math.Vector
@@ -12,13 +16,19 @@ type TileMapFactory struct {
 	Layer     [][]int
 }
 
-func (factory TileMapFactory) Create() *Sprite {
-	tileMap := &Sprite{}
-	tileMap.Texture = factory.ComposeTexture()
+func (factory TileMapFactory) Create() *TileMap {
+	tileMap := &TileMap{}
 
-	tileMap.SetOriginCenter()
+	factory.Init(tileMap)
 
 	return tileMap
+}
+
+func (factory TileMapFactory) Init(tileMap *TileMap) {
+	SpriteFactory{
+		Texture: factory.ComposeTexture(),
+	}.Init(&tileMap.Sprite)
+	tileMap.SetOriginCenter()
 }
 
 func (factory TileMapFactory) ComposeTexture() render.Texture {
@@ -37,6 +47,13 @@ func (factory TileMapFactory) ComposeTexture() render.Texture {
 				X: factory.TileSize.X * float64(columnIndex),
 				Y: factory.TileSize.Y * float64(rowIndex),
 			})
+
+			isTileEmtpy := tileValue == -1
+
+			if isTileEmtpy {
+				continue
+			}
+
 			tile := tiles[tileValue]
 
 			render.Sprite{

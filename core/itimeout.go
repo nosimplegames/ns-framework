@@ -5,7 +5,7 @@ import "github.com/nosimplegames/ns-framework/nodes"
 type ITimeout interface {
 	nodes.ILiving
 
-	Update()
+	UpdateFrame()
 	Exec()
 	GetId() string
 }

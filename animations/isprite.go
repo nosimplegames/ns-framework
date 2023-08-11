@@ -8,4 +8,5 @@ import (
 type ISprite interface {
 	SetRect(*math.Box)
 	SetTexture(render.Texture)
+	UseTextureSizeAsSize()
 }
