@@ -1,8 +1,11 @@
 package hnbCore
 
 import (
+	"math"
+
 	"github.com/nosimplegames/ns-framework/hnbMath"
 	"github.com/nosimplegames/ns-framework/hnbNodes"
+	"github.com/nosimplegames/ns-framework/hnbUtils"
 )
 
 type Entity struct {
@@ -12,12 +15,23 @@ type Entity struct {
 
 	size       hnbMath.Vector
 	drawPolicy DrawPolicy
+
+	hasLifeSpan bool
+	lifeSpan    float64
 }
 
 func (entity *Entity) HandleInput() {
 }
 
 func (entity *Entity) UpdateFrame() {
+	if entity.hasLifeSpan {
+		entity.lifeSpan -= hnbUtils.FrameTime
+		shouldDie := entity.lifeSpan <= 0.0
+
+		if shouldDie {
+			entity.Die()
+		}
+	}
 }
 
 func (entity Entity) GetPosition() hnbMath.Vector {
@@ -60,4 +74,9 @@ func (entity *Entity) SetDrawPolicy(drawPolicy DrawPolicy) {
 
 func (entity Entity) GetDrawPolicy() DrawPolicy {
 	return entity.drawPolicy
+}
+
+func (entity *Entity) SetLifeSpan(lifeSpan float64) {
+	entity.hasLifeSpan = true
+	entity.lifeSpan = math.Abs(lifeSpan)
 }
