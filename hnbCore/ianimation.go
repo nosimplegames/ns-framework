@@ -16,8 +16,14 @@ type IAnimation interface {
 	WillReplay() bool
 	Restart()
 
+	WillSleep() bool
+	StartSleeping()
+	MustWakeUp() bool
+	KeepSleeping()
+
 	IsAlive() bool
 	IsRunning() bool
+	IsSleeping() bool
 	HasFinished() bool
 	Pause()
 	Resume()

@@ -32,6 +32,11 @@ func (animation *SpriteAnimation) UpdateFrame() {
 	}
 }
 
+func (animation *SpriteAnimation) StartSleeping() {
+	animation.Animation.StartSleeping()
+	animation.target.SetRect(&animation.frames[0])
+}
+
 func (animation SpriteAnimation) HasFinished() bool {
 	hasFinished := animation.currentFrameIndex >= len(animation.frames)
 
@@ -68,9 +73,7 @@ func (animation *SpriteAnimation) Stop() {
 
 func (animation SpriteAnimation) Copy(target hnbCore.IAnimationTarget) hnbCore.IAnimation {
 	copy := &SpriteAnimation{
-		Animation: Animation{
-			LoopCount: animation.LoopCount,
-		},
+		Animation:     animation.Animation.Copy(),
 		texture:       animation.texture,
 		frames:        animation.frames,
 		frameDuration: animation.frameDuration,
@@ -78,30 +81,4 @@ func (animation SpriteAnimation) Copy(target hnbCore.IAnimationTarget) hnbCore.I
 	}
 
 	return copy
-}
-
-type SpriteAnimationFactory struct {
-	Texture       hnbRender.Texture
-	FrameDuration float64
-	FrameSize     hnbMath.Vector
-	FrameCount    int
-	LoopCount     int
-}
-
-func (factory SpriteAnimationFactory) Create(target ISprite) hnbCore.IAnimation {
-	animation := &SpriteAnimation{}
-
-	frames := hnbRender.TextureFrameExtractor{
-		Texture:    factory.Texture,
-		FrameSize:  factory.FrameSize,
-		FrameCount: factory.FrameCount,
-	}.Extract()
-
-	animation.target = target
-	animation.texture = factory.Texture
-	animation.frameDuration = factory.FrameDuration
-	animation.frames = frames
-	animation.LoopCount = factory.LoopCount
-
-	return animation
 }

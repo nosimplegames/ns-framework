@@ -7,6 +7,7 @@ import (
 
 type ISprite interface {
 	SetRect(*hnbMath.Box)
+	ResetRect()
 	SetTexture(hnbRender.Texture)
 	UseTextureSizeAsSize()
 }

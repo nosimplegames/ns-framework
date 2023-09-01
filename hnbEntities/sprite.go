@@ -18,6 +18,10 @@ func (sprite *Sprite) SetRect(rect *hnbMath.Box) {
 	sprite.Rect = rect
 }
 
+func (sprite *Sprite) ResetRect() {
+	sprite.SetRect(nil)
+}
+
 func (sprite *Sprite) SetTexture(texture hnbRender.Texture) {
 	sprite.Texture = texture
 }

@@ -16,19 +16,40 @@ func (animations *Animations) UpdateFrame() {
 			continue
 		}
 
-		animation.Apply()
-		animation.UpdateFrame()
-
-		if animation.HasFinished() {
-			if animation.WillReplay() {
-				animation.Restart()
-			} else {
-				animation.Stop()
-			}
+		if animation.IsSleeping() {
+			animations.handleSleepingAnimation(animation)
+		} else if animation.IsRunning() {
+			animations.handleRunningAnimation(animation)
 		}
 	}
 
 	hnbUtils.RemoveDead(&animations.animations)
+}
+
+func (animations Animations) handleSleepingAnimation(animation IAnimation) {
+	animation.KeepSleeping()
+
+	if animation.MustWakeUp() {
+		animation.Restart()
+		animations.handleRunningAnimation(animation)
+	}
+}
+
+func (animations Animations) handleRunningAnimation(animation IAnimation) {
+	animation.Apply()
+	animation.UpdateFrame()
+
+	if animation.HasFinished() {
+		if animation.WillReplay() {
+			if animation.WillSleep() {
+				animation.StartSleeping()
+			} else {
+				animation.Restart()
+			}
+		} else {
+			animation.Stop()
+		}
+	}
 }
 
 var animations *Animations = nil
