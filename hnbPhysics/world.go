@@ -30,7 +30,7 @@ func (world *World) TestCollisions() {
 
 		for j := i + 1; j < len(world.Collisionables); j++ {
 			rightCollisionable := world.Collisionables[j]
-			canCollisionablesCollide := leftCollisionable.CanCollideWith(rightCollisionable.GetCollisionMask()) ||
+			canCollisionablesCollide := leftCollisionable.CanCollideWith(rightCollisionable.GetCollisionMask()) &&
 				rightCollisionable.CanCollideWith(leftCollisionable.GetCollisionMask())
 			canRightCollide := rightCollisionable.IsAlive() &&
 				rightCollisionable.CanCollide()
