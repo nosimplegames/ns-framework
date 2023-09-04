@@ -5,15 +5,15 @@ import (
 
 	"github.com/nosimplegames/ns-framework/hnbMath"
 	"github.com/nosimplegames/ns-framework/hnbNodes"
+	"github.com/nosimplegames/ns-framework/hnbPhysics"
 	"github.com/nosimplegames/ns-framework/hnbUtils"
 )
 
 type Entity struct {
-	hnbMath.Transformable
+	hnbPhysics.Collisionable
 	hnbNodes.Node[IEntity]
 	Drawable
 
-	size       hnbMath.Vector
 	drawPolicy DrawPolicy
 
 	hasLifeSpan bool
@@ -58,14 +58,6 @@ func (entity Entity) GetAncestorsTransform() hnbMath.Transform {
 	}
 
 	return transform
-}
-
-func (entity *Entity) SetSize(size hnbMath.Vector) {
-	entity.size = size
-}
-
-func (entity Entity) GetSize() hnbMath.Vector {
-	return entity.size
 }
 
 func (entity *Entity) SetDrawPolicy(drawPolicy DrawPolicy) {
