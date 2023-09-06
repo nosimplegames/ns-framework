@@ -3,6 +3,7 @@ package hnbCore
 import (
 	"github.com/nosimplegames/ns-framework/hnbMath"
 	"github.com/nosimplegames/ns-framework/hnbNodes"
+	"github.com/nosimplegames/ns-framework/hnbPhysics"
 )
 
 type DrawPolicy int
@@ -14,7 +15,7 @@ const (
 
 type IEntity interface {
 	IDrawable
-	hnbMath.ITransformable
+	hnbPhysics.ICollisionable
 	hnbNodes.INode[IEntity]
 
 	HandleInput()

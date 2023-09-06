@@ -72,3 +72,8 @@ func (entity *Entity) SetLifeSpan(lifeSpan float64) {
 	entity.hasLifeSpan = true
 	entity.lifeSpan = math.Abs(lifeSpan)
 }
+
+func (entity *Entity) Die() {
+	entity.Collisionable.Die()
+	entity.Node.Die()
+}

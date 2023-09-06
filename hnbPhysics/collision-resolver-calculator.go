@@ -1,6 +1,10 @@
 package hnbPhysics
 
-import "github.com/nosimplegames/ns-framework/hnbMath"
+import (
+	"math"
+
+	"github.com/nosimplegames/ns-framework/hnbMath"
+)
 
 type CollisionResolverCalculator struct {
 	LeftAABB  hnbMath.Box
@@ -58,4 +62,21 @@ func (calculator CollisionResolverCalculator) IsResolutionPositive(
 	lineB hnbMath.LinearLine,
 ) bool {
 	return lineB.Start <= lineA.Start && lineB.End() <= lineA.End()
+}
+
+func (calculator CollisionResolverCalculator) GetMinVectorResolver() hnbMath.Vector {
+	xResolution := calculator.CalculateXResolution()
+	yResolution := calculator.CalculateYResolution()
+
+	isXLowerThanY := math.Abs(xResolution) < math.Abs(yResolution)
+
+	if isXLowerThanY {
+		return hnbMath.Vector{
+			X: xResolution,
+		}
+	}
+
+	return hnbMath.Vector{
+		Y: yResolution,
+	}
 }

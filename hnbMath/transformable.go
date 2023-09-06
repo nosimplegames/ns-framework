@@ -1,9 +1,10 @@
 package hnbMath
 
 type Transformable struct {
-	position Vector
-	origin   Vector
-	rotation float64
+	prevPosition Vector
+	position     Vector
+	origin       Vector
+	rotation     float64
 
 	wasScaleSet bool
 	scale       Vector
@@ -14,6 +15,14 @@ type Transformable struct {
 
 func (transformable *Transformable) Move(movementVector Vector) {
 	transformable.SetPosition(transformable.position.Add(movementVector))
+}
+
+func (transformable *Transformable) MoveX(x float64) {
+	transformable.Move(Vector{X: x})
+}
+
+func (transformable *Transformable) MoveY(y float64) {
+	transformable.Move(Vector{Y: y})
 }
 
 func (transformable *Transformable) Rotate(tetha float64) {
@@ -33,7 +42,12 @@ func (transformable Transformable) GetPosition() Vector {
 	return transformable.position
 }
 
+func (transformable Transformable) GetPrevPosition() Vector {
+	return transformable.prevPosition
+}
+
 func (transformable *Transformable) SetPosition(position Vector) {
+	transformable.prevPosition = transformable.position
 	transformable.position = position
 	transformable.wasTransformCalculated = false
 }

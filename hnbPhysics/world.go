@@ -75,6 +75,12 @@ func GetWorld() *World {
 }
 
 func AddCollisionable(collisionable ICollisionable) {
+	canAddCollisionable := !hnbUtils.IsNil(collisionable)
+
+	if !canAddCollisionable {
+		return
+	}
+
 	world := GetWorld()
 	world.AddCollisinable(collisionable)
 }

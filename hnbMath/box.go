@@ -48,6 +48,22 @@ func (box Box) ImageRect() image.Rectangle {
 	return image.Rect(box.IntCorners())
 }
 
+func (box Box) Left() float64 {
+	return box.Position.X - box.Size.X*0.5
+}
+
+func (box Box) Right() float64 {
+	return box.Position.X + box.Size.X*0.5
+}
+
+func (box Box) Top() float64 {
+	return box.Position.Y - box.Size.Y*0.5
+}
+
+func (box Box) Bottom() float64 {
+	return box.Position.Y + box.Size.Y*0.5
+}
+
 func BoxFromCorners(topX, topY, bottomX, bottomY float64) Box {
 	size := Vector{
 		X: bottomX - topX,

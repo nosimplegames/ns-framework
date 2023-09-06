@@ -9,6 +9,7 @@ type Collisionable struct {
 	canCollide        bool
 	collisionMask     string
 	collisioningMasks []string
+	isDeath           bool
 }
 
 func (box *Collisionable) SetSize(size hnbMath.Vector) {
@@ -52,4 +53,26 @@ func (collisionable *Collisionable) SetCollisionMask(mask string) {
 }
 
 func (collisionable Collisionable) OnCollision(collision Collision) {
+}
+
+func (collisionable Collisionable) IsAlive() bool {
+	return !collisionable.isDeath
+}
+
+func (collisionable *Collisionable) Die() {
+	collisionable.isDeath = true
+}
+
+func (collisionable Collisionable) GetAABB() hnbMath.Box {
+	return hnbMath.Box{
+		Position: collisionable.GetPosition(),
+		Size:     collisionable.size,
+	}
+}
+
+func (collisionable Collisionable) GetPrevAABB() hnbMath.Box {
+	return hnbMath.Box{
+		Size:     collisionable.size,
+		Position: collisionable.GetPrevPosition(),
+	}
 }

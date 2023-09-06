@@ -3,6 +3,8 @@ package hnbPhysics
 import "github.com/nosimplegames/ns-framework/hnbMath"
 
 type ICollisionable interface {
+	hnbMath.ITransformable
+
 	GetSize() hnbMath.Vector
 	GetPosition() hnbMath.Vector
 	GetCollisionMask() string
@@ -10,4 +12,5 @@ type ICollisionable interface {
 	CanCollideWith(collisionMask string) bool
 	OnCollision(collision Collision)
 	IsAlive() bool
+	GetAABB() hnbMath.Box
 }

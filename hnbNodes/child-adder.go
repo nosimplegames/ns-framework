@@ -1,5 +1,7 @@
 package hnbNodes
 
+import "github.com/nosimplegames/ns-framework/hnbUtils"
+
 type ChildAdder[T INode[T]] struct {
 	Parent   INode[T]
 	Child    INode[T]
@@ -18,7 +20,7 @@ func (adder ChildAdder[T]) Add() {
 }
 
 func (adder ChildAdder[T]) addChildToParent(child INode[T], parent INode[T]) {
-	canAdd := child != nil && parent != nil
+	canAdd := !hnbUtils.IsNil(child) && !hnbUtils.IsNil(parent)
 
 	if !canAdd {
 		return
