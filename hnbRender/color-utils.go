@@ -14,6 +14,12 @@ func IntToColor(intColor int) color.Color {
 }
 
 func ExtractFloatColorComponents(color color.Color) (float64, float64, float64, float64) {
+	isValidColor := color != nil
+
+	if !isValidColor {
+		return 0, 0, 0, 1
+	}
+
 	rI, gI, bI, aI := color.RGBA()
 
 	r := float64(rI&0xFF) / 255.0

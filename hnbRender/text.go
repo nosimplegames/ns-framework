@@ -18,6 +18,12 @@ type Text struct {
 }
 
 func (text Text) Render() {
+	canRender := len(text.Text) > 0 && text.FontFace != nil && text.Target != nil
+
+	if !canRender {
+		return
+	}
+
 	x, y := text.GetRenderingPosition()
 	color := text.ColorM.Apply(color.White)
 
