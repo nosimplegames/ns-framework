@@ -12,5 +12,4 @@ type ICollisionable interface {
 	CanCollideWith(collisionMask string) bool
 	OnCollision(collision Collision)
 	IsAlive() bool
-	GetAABB() hnbMath.Box
 }

@@ -62,17 +62,3 @@ func (collisionable Collisionable) IsAlive() bool {
 func (collisionable *Collisionable) Die() {
 	collisionable.isDeath = true
 }
-
-func (collisionable Collisionable) GetAABB() hnbMath.Box {
-	return hnbMath.Box{
-		Position: collisionable.GetPosition(),
-		Size:     collisionable.size,
-	}
-}
-
-func (collisionable Collisionable) GetPrevAABB() hnbMath.Box {
-	return hnbMath.Box{
-		Size:     collisionable.size,
-		Position: collisionable.GetPrevPosition(),
-	}
-}

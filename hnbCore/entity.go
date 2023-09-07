@@ -35,9 +35,16 @@ func (entity *Entity) UpdateFrame() {
 }
 
 func (entity Entity) GetPosition() hnbMath.Vector {
+	return entity.TransformPointByFullTransform(entity.Collisionable.GetPosition())
+}
+
+func (entity Entity) GetPrevPosition() hnbMath.Vector {
+	return entity.TransformPointByFullTransform(entity.Collisionable.GetPrevPosition())
+}
+
+func (entity Entity) TransformPointByFullTransform(point hnbMath.Vector) hnbMath.Vector {
 	fullTransform := entity.GetAncestorsTransform()
-	entityPosition := entity.Transformable.GetPosition()
-	transformedX, transformedY := fullTransform.Apply(entityPosition.X, entityPosition.Y)
+	transformedX, transformedY := fullTransform.Apply(point.X, point.Y)
 
 	return hnbMath.Vector{
 		X: transformedX,
@@ -76,4 +83,18 @@ func (entity *Entity) SetLifeSpan(lifeSpan float64) {
 func (entity *Entity) Die() {
 	entity.Collisionable.Die()
 	entity.Node.Die()
+}
+
+func (entity Entity) GetAABB() hnbMath.Box {
+	return hnbMath.Box{
+		Position: entity.GetPosition(),
+		Size:     entity.GetSize(),
+	}
+}
+
+func (entity Entity) GetPrevAABB() hnbMath.Box {
+	return hnbMath.Box{
+		Position: entity.GetPrevPosition(),
+		Size:     entity.GetSize(),
+	}
 }

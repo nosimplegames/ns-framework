@@ -1,20 +1,34 @@
 package hnbPhysics
 
+import "github.com/nosimplegames/ns-framework/hnbMath"
+
 type CollisionTester struct {
 	LeftCollisionable  ICollisionable
 	RightCollisionable ICollisionable
 }
 
 func (tester CollisionTester) IsHappening() bool {
-	leftAABB := tester.LeftCollisionable.GetAABB()
-	rightAABB := tester.RightCollisionable.GetAABB()
+	leftAABB := hnbMath.Box{
+		Position: tester.LeftCollisionable.GetPosition(),
+		Size:     tester.LeftCollisionable.GetSize(),
+	}
+	rightAABB := hnbMath.Box{
+		Position: tester.RightCollisionable.GetPosition(),
+		Size:     tester.RightCollisionable.GetSize(),
+	}
 
 	return leftAABB.IsColliding(rightAABB)
 }
 
 func (tester CollisionTester) Report() {
-	leftAABB := tester.LeftCollisionable.GetAABB()
-	rightAABB := tester.RightCollisionable.GetAABB()
+	leftAABB := hnbMath.Box{
+		Position: tester.LeftCollisionable.GetPosition(),
+		Size:     tester.LeftCollisionable.GetSize(),
+	}
+	rightAABB := hnbMath.Box{
+		Position: tester.RightCollisionable.GetPosition(),
+		Size:     tester.RightCollisionable.GetSize(),
+	}
 
 	leftCollision := Collision{
 		AnotherCollisionMask: tester.RightCollisionable.GetCollisionMask(),
@@ -22,7 +36,9 @@ func (tester CollisionTester) Report() {
 			LeftAABB:  leftAABB,
 			RightAABB: rightAABB,
 		},
-		Another: tester.RightCollisionable,
+		Another:     tester.RightCollisionable,
+		AABB:        leftAABB,
+		AnotherAABB: rightAABB,
 	}
 
 	rightCollision := Collision{
@@ -31,7 +47,9 @@ func (tester CollisionTester) Report() {
 			LeftAABB:  rightAABB,
 			RightAABB: leftAABB,
 		},
-		Another: tester.LeftCollisionable,
+		Another:     tester.LeftCollisionable,
+		AABB:        rightAABB,
+		AnotherAABB: leftAABB,
 	}
 
 	tester.LeftCollisionable.OnCollision(leftCollision)
