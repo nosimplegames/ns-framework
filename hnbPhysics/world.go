@@ -10,7 +10,17 @@ type World struct {
 }
 
 func (world *World) AddCollisinable(collisionable ICollisionable) {
+	canAddCollisionable := !hnbUtils.IsNil(collisionable)
+
+	if !canAddCollisionable {
+		return
+	}
+
 	world.Collisionables = append(world.Collisionables, collisionable)
+}
+
+func (world *World) Clear() {
+	world.Collisionables = []ICollisionable{}
 }
 
 func (world *World) UpdateFrame() {
@@ -75,12 +85,6 @@ func GetWorld() *World {
 }
 
 func AddCollisionable(collisionable ICollisionable) {
-	canAddCollisionable := !hnbUtils.IsNil(collisionable)
-
-	if !canAddCollisionable {
-		return
-	}
-
 	world := GetWorld()
 	world.AddCollisinable(collisionable)
 }

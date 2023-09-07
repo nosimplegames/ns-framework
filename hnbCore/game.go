@@ -11,6 +11,7 @@ import (
 	"github.com/nosimplegames/ns-framework/hnbMath"
 	"github.com/nosimplegames/ns-framework/hnbPhysics"
 	"github.com/nosimplegames/ns-framework/hnbRender"
+	"github.com/nosimplegames/ns-framework/hnbUtils"
 )
 
 type Game struct {
@@ -21,15 +22,19 @@ type Game struct {
 	WindowSize      hnbMath.Vector
 	Size            hnbMath.Vector
 
+	isPaused bool
+
 	MustPrintDebug bool
 	MustDrawWorld  bool
 }
 
 func (game *Game) Update(*ebiten.Image) error {
-	GetUpdatables().UpdateFrame()
-	GetAnimations().UpdateFrame()
-	game.UpdateEntities()
-	hnbPhysics.GetWorld().UpdateFrame()
+	if !game.isPaused {
+		GetUpdatables().UpdateFrame()
+		GetAnimations().UpdateFrame()
+		game.UpdateEntities()
+		hnbPhysics.GetWorld().UpdateFrame()
+	}
 
 	var err error = nil
 
@@ -39,6 +44,10 @@ func (game *Game) Update(*ebiten.Image) error {
 
 	if inpututil.IsKeyJustReleased(ebiten.KeyF1) {
 		game.MustPrintDebug = !game.MustPrintDebug
+	}
+
+	if inpututil.IsKeyJustReleased(ebiten.KeyP) {
+		game.togglePause()
 	}
 
 	if inpututil.IsKeyJustReleased(ebiten.KeyF2) {
@@ -114,7 +123,7 @@ func (game *Game) PushScene(scene IScene) {
 		return
 	}
 
-	root = currentScene
+	setRoot(currentScene)
 }
 
 func (game Game) Layout(_, _ int) (int, int) {
@@ -153,15 +162,38 @@ func (game *Game) AddCamera(camera ICamera) {
 	game.Cameras = append(game.Cameras, camera)
 }
 
-var root IEntity
+func (game *Game) togglePause() {
+	game.isPaused = !game.isPaused
+}
 
-func GetRoot() IEntity {
+var root IScene
+
+func setRoot(newRoot IScene) {
+	root = newRoot
+	world := hnbPhysics.GetWorld()
+	world.Clear()
+
+	doesRootExist := !hnbUtils.IsNil(root)
+
+	if doesRootExist {
+		root.RegisterCollisionables()
+	}
+}
+
+func GetRoot() IScene {
 	return root
 }
 
 func AddChildToRoot(child IEntity) {
+	canAddChild := !hnbUtils.IsNil(child) && !hnbUtils.IsNil(root)
+
+	if !canAddChild {
+		return
+	}
+
 	EntityAdder{
 		Parent: root,
 		Child:  child,
 	}.Add()
+	hnbPhysics.AddCollisionable(child)
 }
