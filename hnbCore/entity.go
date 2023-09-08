@@ -3,6 +3,7 @@ package hnbCore
 import (
 	"math"
 
+	"github.com/nosimplegames/ns-framework/hnbEvents"
 	"github.com/nosimplegames/ns-framework/hnbMath"
 	"github.com/nosimplegames/ns-framework/hnbNodes"
 	"github.com/nosimplegames/ns-framework/hnbPhysics"
@@ -12,6 +13,7 @@ import (
 type Entity struct {
 	hnbPhysics.Collisionable
 	hnbNodes.Node[IEntity]
+	hnbEvents.EventTarget
 	Drawable
 
 	drawPolicy DrawPolicy

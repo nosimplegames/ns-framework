@@ -1,6 +1,7 @@
 package hnbCore
 
 import (
+	"github.com/nosimplegames/ns-framework/hnbEvents"
 	"github.com/nosimplegames/ns-framework/hnbMath"
 	"github.com/nosimplegames/ns-framework/hnbNodes"
 	"github.com/nosimplegames/ns-framework/hnbPhysics"
@@ -17,6 +18,7 @@ type IEntity interface {
 	IDrawable
 	hnbPhysics.ICollisionable
 	hnbNodes.INode[IEntity]
+	hnbEvents.IEventTarget
 
 	HandleInput()
 	UpdateFrame()

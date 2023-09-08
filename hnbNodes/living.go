@@ -3,9 +3,10 @@ package hnbNodes
 import "github.com/nosimplegames/ns-framework/hnbEvents"
 
 type Living struct {
+	hnbEvents.EventTarget
+
 	IsDead   bool
 	IsPaused bool
-	OnDie    hnbEvents.Signal
 }
 
 func (living Living) IsAlive() bool {
@@ -18,7 +19,7 @@ func (living *Living) Die() {
 	}
 
 	living.IsDead = true
-	living.OnDie.Fire()
+	living.Fire("die")
 }
 
 func (living Living) IsRunning() bool {

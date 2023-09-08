@@ -1,8 +1,7 @@
 package hnbEvents
 
 import (
-	"errors"
-	"fmt"
+	"github.com/nosimplegames/ns-framework/hnbUtils"
 )
 
 type EventListeners = map[string][]EventCallback
@@ -51,16 +50,32 @@ func (target *EventTarget) AddEventCreator(creator EventCreator) {
 	target.creators = append(target.creators, creator)
 }
 
-func (target EventTarget) Fire(eventType string) error {
+func (target EventTarget) Fire(eventType string) {
 	for _, creator := range target.creators {
 		canCreatorFire := creator.EventType == eventType
 
 		if canCreatorFire {
 			event := creator.CreateEvent()
 			target.DispatchEvent(event)
-			return nil
+			return
 		}
 	}
 
-	return errors.New(fmt.Sprintf("Event Target: event (%s) cannot be fired from creators", eventType))
+	emptyEvent := Event{
+		Type: eventType,
+	}
+	target.DispatchEvent(emptyEvent)
+}
+
+func (target *EventTarget) On(eventType string, callback hnbUtils.Callback) {
+	target.OnEvent(eventType, func(event Event) {
+		callback()
+	})
+}
+
+func (target *EventTarget) OnEvent(eventType string, callback EventCallback) {
+	target.AddEventListener(EventListener{
+		EventType: eventType,
+		Callback:  callback,
+	})
 }

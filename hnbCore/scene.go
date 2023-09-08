@@ -11,9 +11,13 @@ func (scene Scene) RegisterCollisionables() {
 }
 
 func registerEntityCollisionables(entity IEntity) {
-	for _, child := range entity.GetChildren() {
-		childAsIEntity := child.(IEntity)
-		hnbPhysics.AddCollisionable(childAsIEntity)
-		registerEntityCollisionables(childAsIEntity)
+	for _, childNode := range entity.GetChildren() {
+		child := childNode.(IEntity)
+
+		if child.CanCollide() {
+			hnbPhysics.AddCollisionable(child)
+		}
+
+		registerEntityCollisionables(child)
 	}
 }

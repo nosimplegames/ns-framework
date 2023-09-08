@@ -6,7 +6,6 @@ type ICollisionable interface {
 	hnbMath.ITransformable
 
 	GetSize() hnbMath.Vector
-	GetPosition() hnbMath.Vector
 	GetCollisionMask() string
 	CanCollide() bool
 	CanCollideWith(collisionMask string) bool
